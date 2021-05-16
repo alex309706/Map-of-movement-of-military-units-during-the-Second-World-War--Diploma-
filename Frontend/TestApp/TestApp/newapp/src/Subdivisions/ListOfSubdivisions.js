@@ -1,4 +1,6 @@
-import {Button,DeleteIcon,TextField,ProfileButton,useStyles,React,AddSubdivision} from './index';
+import {Button,DeleteIcon,TextField,ProfileButton,useStyles,React,AddSubdivision,axios} from './index';
+import {useState, useEffect} from 'react';
+
 function Header(props)
 {
     const classes = useStyles();
@@ -20,7 +22,7 @@ function Subdivision(props)
     const classes = useStyles();
     return(
         <div>
-            <TextField defaultValue={props.Name}
+            <TextField defaultValue={props.name}
              className={classes.textField}
              variant="outlined"
              label = "Название"
@@ -28,7 +30,7 @@ function Subdivision(props)
                 readOnly: true,
               }}
              />
-              <TextField defaultValue={props.Commander}
+              <TextField defaultValue={props.commander.lastName}
              className={classes.textField}
              variant="outlined"
              label = "Командующий"
@@ -36,7 +38,7 @@ function Subdivision(props)
                 readOnly: true,
               }}
              />
-             <TextField defaultValue={props.Strength}
+             <TextField defaultValue={props.strength}
              className={classes.textField}
              variant="outlined"
              label = "Численность"
@@ -44,7 +46,7 @@ function Subdivision(props)
                 readOnly: true,
               }}
              />
-             <TextField defaultValue={props.Composition}
+             <TextField defaultValue={props.composition}
              className={classes.textField}
              variant="outlined"
              label = "Состав"
@@ -78,8 +80,8 @@ function SubdivisionsToComponents(props)
 {
     const Subdivisions=props.Subdivisions;
     const mapToComponents = Subdivisions.map((s)=>
-    <li style={{ listStyleType: "none" }}>
-        { <Subdivision {...s} Location={s.Location.City} /> }
+    <li key={s.id} style={{ listStyleType: "none" }}>
+        { <Subdivision  {...s} /> }
     </li>
     );
     return(
@@ -89,58 +91,22 @@ function SubdivisionsToComponents(props)
 
 export default function ListOfSubdivisions()
 {
-   
+    const [Subdivisions, setSubdivisions] = useState([])
+    const Url = 'https://localhost:44315/api/Subdivisions';
+    useEffect(() => {
+        axios.get(Url)
+        .then(response =>
+            {
+                console.log(response.data);
+                setSubdivisions(response.data)
+            })
+        },[])
+    
     return(
         <div >
         <ProfileButton/>
         <Header/>
-        <SubdivisionsToComponents Subdivisions={subdivisionsFromBackend}/>
+        <SubdivisionsToComponents Subdivisions={Subdivisions}/>
         </div>
     )
 }
-const subdivisionsFromBackend = [
-    {
-        "id":"1",
-        "Name":"3 Армия",
-        "Strength":"212625",
-        "Composition":"4ск, 11мк, 11сд, 27сд, 56сд, 85сд, 204мсд, 29тд, 33тд, 7птартб",
-        "Commander":"Иванов.И.И.",
-        "Location":{
-            "City":"Берлин",
-            "Coordinates":{
-                "X":10,
-                "Y":20
-            }
-        }
-    },
-    {
-        "id":"2",
-        "Name":"4 Армия",
-        "Strength":"212625",
-        "Commander":"Иванов.И.И.",
-        "Composition":"28ск	14мк	6сд, 42сд, 49сд, 75сд, 205мсд, 22тд, 30тд, 10сад",
-        "Location":{
-            "City":"Берлин",
-            "Coordinates":{
-                "X":10,
-                "Y":20
-            }
-        }
-        
-    },
-    {
-        "id":"3",
-        "Name":"10 Армия",
-        "Strength":"212625",
-        "Commander":"Иванов.И.И.",
-        "Composition":"1ск, 5ск, 6мк, 13мк, 6кав.к., 2сд, 8сд, 13сд, 86сд, 113сд, 26мсд, 115сд, 208мд, 4тд, 7тд, 25тд, 31тд, 6кав.д., 36кав.д., 9сад, 6птб",
-        "Location":{
-            "City":"Берлин",
-            "Coordinates":{
-                "X":10,
-                "Y":20
-            }
-        }
-
-    },
-]

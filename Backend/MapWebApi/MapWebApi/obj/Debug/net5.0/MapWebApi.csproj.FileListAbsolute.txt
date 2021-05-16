@@ -133,7 +133,6 @@ C:\Users\Alex\source\repos\MapWebApi\MapWebApi\obj\Debug\net5.0\ref\MapWebApi.dl
 C:\Users\Alex\source\repos\MapWebApi\MapWebApi\obj\Debug\net5.0\MapWebApi.pdb
 C:\Users\Alex\source\repos\MapWebApi\MapWebApi\obj\Debug\net5.0\MapWebApi.genruntimeconfig.cache
 C:\Users\Alex\source\repos\MapWebApi\MapWebApi\bin\Debug\net5.0\appsettings.json
-E:\Учеба\4 course 2 term\Диплом\Backend\MapWebApi\MapWebApi\bin\Debug\net5.0\appsettings.Development.json
 E:\Учеба\4 course 2 term\Диплом\Backend\MapWebApi\MapWebApi\bin\Debug\net5.0\appsettings.json
 E:\Учеба\4 course 2 term\Диплом\Backend\MapWebApi\MapWebApi\bin\Debug\net5.0\MapWebApi.exe
 E:\Учеба\4 course 2 term\Диплом\Backend\MapWebApi\MapWebApi\bin\Debug\net5.0\MapWebApi.deps.json

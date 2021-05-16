@@ -19,6 +19,8 @@ namespace MapWebApi
 {
     public class Startup
     {
+
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,6 +39,15 @@ namespace MapWebApi
 
 
             services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:3000");
+                                      builder.WithOrigins("http://localhost:3001");
+                                  });
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MapWebApi", Version = "v1" });
@@ -53,6 +64,7 @@ namespace MapWebApi
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MapWebApi v1"));
             }
 
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseHttpsRedirection();
 
             app.UseRouting();

@@ -1,19 +1,17 @@
-import React from 'react';
-import {useStyles ,ProfileButton,TextField,DeleteIcon,Button,AddActualData} from './index';
-import Box from '@material-ui/core/Box';
-
+import React,{useState,useEffect} from 'react';
+import {useStyles ,ProfileButton,TextField,DeleteIcon,Button,AddActualData,axios,Box} from './index';
 
 const defaultProps = {
     bgcolor: 'background.paper',
     m: 4,
     border: 1,
+    borderRadius:16
   };
-
-function ActualData(props)
+function GetActualDataAsComponent(props)
 {
     const classes = useStyles();
     return(
-        <Box borderRadius={16} {...defaultProps}> 
+        <Box {...defaultProps}> 
             <div >
             <TextField defaultValue={props.date}
              className={classes.textField}
@@ -23,7 +21,7 @@ function ActualData(props)
                 readOnly: true,
               }}
              />
-            <TextField defaultValue={props.Subdivision.Name}
+            <TextField defaultValue={props.subdivision.name}
              className={classes.textField}
              variant="outlined"
              label ="Название подразделения"
@@ -31,7 +29,8 @@ function ActualData(props)
                 readOnly: true,
               }}
              />
-            <TextField defaultValue={props.Subdivision.Commander.Name}
+            <TextField 
+            defaultValue={`${props.subdivision.commander.rank.name}${props.subdivision.commander.firstName? props.subdivision.commander.firstName : ''} ${props.subdivision.commander.lastName? props.subdivision.commander.lastName : ''} ${props.subdivision.commander.patronymic? props.subdivision.commander.patronymic : ''}`} 
              className={classes.textField}
              variant="outlined"
              label ="Командир"
@@ -39,7 +38,7 @@ function ActualData(props)
                 readOnly: true,
               }}
              />
-             <TextField defaultValue={props.Subdivision.Strength}
+             <TextField defaultValue={props.subdivision.strength}
              className={classes.textField}
              variant="outlined"
              label ="Численность"
@@ -47,7 +46,7 @@ function ActualData(props)
                 readOnly: true,
               }}
              />
-             <TextField defaultValue={props.Location.City}
+             <TextField defaultValue={props.location.name}
              className={classes.textField}
              variant="outlined"
              label ="Местоположение"
@@ -55,7 +54,7 @@ function ActualData(props)
                 readOnly: true,
               }}
              />
-              <TextField defaultValue={props.Document}
+              <TextField defaultValue={props.document.name}
              className={classes.textField}
              variant="outlined"
              label ="Документ"
@@ -80,86 +79,22 @@ function ActualData(props)
                 Удалить
             </Button>
              </div>
-           
             </div>
         </Box>
     )
 }
 
-function ActualDataToComponents(props)
+function ActualDataToComponents({ActualData:actualData})
 {
-    const actualData=props.ActualData;
     const mapToComponents = actualData.map((aD)=>
-    <li style={{ listStyleType: "none" }}>
-        <ActualData {...aD}/>
+    <li key={aD.id} style={{ listStyleType: "none" }}>
+        <GetActualDataAsComponent {...aD}/>
     </li>
     );
     return(
         <ul>{mapToComponents}</ul>
     );
 }
-const actualDataFromBackend = [
-    {
-        "id":"1",
-        "date":"22.06.1941",
-        "Subdivision":{
-            "Name":"1-я мотострелковая",
-            "Commander":{
-                "id":"1",
-                "Name":"Иванов И.И.",
-            },
-            "Strength":"12345",
-        },
-        "Location":{
-            "City":"Гродно",
-            "Coordinates":{
-                "X":"10",
-                "Y":"20"
-            }
-        },
-        "Document":"Опись № дело #"
-    },
-    {
-        "id":"2",
-        "date":"22.06.1941",
-        "Subdivision":{
-            "Name":"1-я мотострелковая",
-            "Commander":{
-                "id":"1",
-                "Name":"Иванов И.И.",
-            },
-            "Strength":"12345",
-            },
-            "Location":{
-                "City":"Гродно",
-                "Coordinates":{
-                    "X":"10",
-                    "Y":"20"
-                }
-        },
-        "Document":"Опись № дело #"
-    },
-    {
-        "id":"3",
-        "date":"22.06.1941",
-        "Subdivision":{
-            "Name":"1-я мотострелковая",
-            "Commander":{
-                "id":"1",
-                "Name":"Иванов И.И.",
-            },
-            "Strength":"12345",
-            },
-            "Location":{
-                "City":"Гродно",
-                "Coordinates":{
-                    "X":"10",
-                    "Y":"20"
-                }
-        },
-        "Document":"Опись № дело #"
-    },
-]
 function Header(props)
 {
     const classes = useStyles();
@@ -183,16 +118,23 @@ function AddButton()
         </Button>
     )
 }
-
 export default function ListOfActualData()
 {
-    const classes = useStyles();
+    const Url = 'https://localhost:44315/api/ActualData';
+    const [ActualData, setActualData] = useState([])
+    useEffect(() => {
+       axios.get(Url)
+       .then(response=>
+        {
+        console.log(response.data)
+        setActualData(response.data)
+        })
+    },[])
     return(
         <div >
             <ProfileButton/>
             <Header/>
-            
-            <ActualDataToComponents ActualData={actualDataFromBackend}/>
+            <ActualDataToComponents ActualData={ActualData}/>
         </div>
     )
 }

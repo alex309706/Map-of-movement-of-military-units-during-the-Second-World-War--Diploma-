@@ -29,7 +29,7 @@ namespace MapWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Commander>>> Get()
         {
-            return await db.Commanders.ToListAsync();
+            return await db.Commanders.Include(c=>c.Rank).ToListAsync();
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Commander>> Get(int id)
@@ -42,6 +42,7 @@ namespace MapWebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Commander>> Post(Commander commander)
         {
+            
             if (commander == null)
             {
                 return BadRequest();

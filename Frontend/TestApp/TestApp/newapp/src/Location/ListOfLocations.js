@@ -1,5 +1,6 @@
-import React from 'react';
-import {useStyles ,ProfileButton,TextField,DeleteIcon,Button,AddLocation} from './index';
+import React,{useState,useEffect} from 'react';
+import {useStyles ,ProfileButton,TextField,DeleteIcon,Button,AddLocation,axios} from './index';
+
 
 function Header(props)
 {
@@ -17,7 +18,7 @@ function Location(props)
     const classes = useStyles();
     return(
         <div >
-            <TextField defaultValue={props.City}
+            <TextField defaultValue={props.name}
             className={classes.textField}
             variant="outlined"
             label = "Название"
@@ -25,7 +26,7 @@ function Location(props)
                 readOnly: true,
             }}
             />
-            <TextField defaultValue={props.Coordinates.X}
+            <TextField defaultValue={props.coordinateX}
             className={classes.textField}
             variant="outlined"
             label = "Координата X"
@@ -33,7 +34,7 @@ function Location(props)
                 readOnly: true,
             }}
             />
-            <TextField defaultValue={props.Coordinates.Y}
+            <TextField defaultValue={props.coordinateY}
             className={classes.textField}
             variant="outlined"
             label = "Координата Y"
@@ -81,9 +82,9 @@ function AddLocationButton(props)
 function LocationsToComponents(props)
 {
     const Locations=props.Locations;
-    const mapToComponents = Locations.map((l)=>
-    <li style={{ listStyleType: "none" }}>
-        { <Location {...l}/> }
+    const mapToComponents = Locations.map((location)=>
+    <li key={location.id} style={{ listStyleType: "none" }}>
+        { <Location {...location}/> }
     </li>
     );
     return(
@@ -93,37 +94,21 @@ function LocationsToComponents(props)
 
 export default function ListOfLocations()
 {
+    const Url = 'https://localhost:44315/api/Locations';
+    const [Locations, setLocations] = useState([])
+    useEffect(() => {
+        axios.get(Url)
+        .then(response=>
+            {
+                setLocations(response.data)
+            }
+    )}, [])
     return(
         <div >
         <ProfileButton/>
         <Header/>
-        <LocationsToComponents Locations={locationsFromBackend}/>
+        <LocationsToComponents Locations={Locations}/>
         </div>
     )
 }
-  const locationsFromBackend = [
-    {
-        "id":"1",
-        "City":"Берлин",
-        "Coordinates":{
-            "X":10,
-            "Y":15
-        }
-    },
-    {
-        "id":"2",
-        "City":"Минск",
-        "Coordinates":{
-            "X":20,
-            "Y":25
-        }
-    },
-    {
-        "id":"3",
-        "City":"Гродно",
-        "Coordinates":{
-            "X":25,
-            "Y":30
-        }
-    },
-]
+  

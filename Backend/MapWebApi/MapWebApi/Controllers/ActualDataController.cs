@@ -24,25 +24,47 @@ namespace MapWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ActualData>>> GetActualData()
         {
-            return await _context.ActualData.ToListAsync();
-        }
-
-        // GET: api/ActualData/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ActualData>> GetActualData(int id)
-        {
-            var actualData = await _context.ActualData.FindAsync(id);
-
-            if (actualData == null)
+            var actualData = await _context.ActualData
+                                    .Include(actualData => actualData.Subdivision)
+                                    .ThenInclude(s => s.Commander)
+                                    .ThenInclude(c => c.Rank)
+                                    .Include(actualData => actualData.Subdivision)
+                                    .ThenInclude(s => s.TypeOfSubdivision)
+                                    .Include(actualData => actualData.Location)
+                                    .Include(actualData => actualData.Document)
+                                    .ToListAsync();
+            if (actualData.Count<1)
             {
-                return NotFound();
+                var initialData = SetInitialActualData();
+                _context.ActualData.AddRange(initialData);
+                await _context.SaveChangesAsync();
             }
 
             return actualData;
+                //await _context.ActualData
+                //.Include(actualData => actualData.Subdivision)
+                //.ThenInclude(s => s.Commander)
+                //.ThenInclude(c => c.Rank)
+                //.Include(actualData => actualData.Subdivision)
+                //.ThenInclude(s => s.TypeOfSubdivision)
+                //.Include(actualData => actualData.Location)
+                //.Include(actualData => actualData.Document)
+                //.ToListAsync();
         }
-
-        // PUT: api/ActualData/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // GET: api/ActualData/date
+        [HttpGet("{date}")]
+        public async Task<ActionResult<IEnumerable<ActualData>>> GetActualData(DateTime date)
+        {
+            return await _context.ActualData.Where(actualData=>actualData.Date == date)
+                .Include(actualData => actualData.Subdivision)
+                .ThenInclude(s => s.Commander)
+                .ThenInclude(c => c.Rank)
+                .Include(actualData => actualData.Subdivision)
+                .ThenInclude(s => s.TypeOfSubdivision)
+                .Include(actualData => actualData.Location)
+                .Include(actualData => actualData.Document)
+                .ToListAsync();
+        }
         [HttpPut("{id}")]
         public async Task<IActionResult> PutActualData(int id, ActualData actualData)
         {
@@ -102,6 +124,28 @@ namespace MapWebApi.Controllers
         private bool ActualDataExists(int id)
         {
             return _context.ActualData.Any(e => e.Id == id);
+        }
+        private  ActualData[] SetInitialActualData()
+        {
+            ActualData[] result = new ActualData[2];
+            ActualData firstActualData = new ActualData
+            {
+                Date = new DateTime(1941, 6, 22),
+                SubdivisionId = _context.Subdivisions.First().Id,
+                DocumentId = _context.Documents.First().Id,
+                LocationId = _context.Locations.First().Id,
+            };
+            ActualData secondActualData = new ActualData
+            {
+                Date = new DateTime(1941,6,23),
+                SubdivisionId = _context.Subdivisions.First().Id,
+                DocumentId = _context.Documents.First().Id,
+                LocationId = 2
+            };
+            result[0] = firstActualData;
+            result[1] = secondActualData;
+
+            return result;
         }
     }
 }

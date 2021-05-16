@@ -11,3 +11,4 @@ export {default as React} from 'react';
 export {default as Box} from '@material-ui/core/Box';
 export {default as Menu} from '@material-ui/core/Menu';
 export {default as MenuItem} from '@material-ui/core/MenuItem';
+export {default as axios} from 'axios';

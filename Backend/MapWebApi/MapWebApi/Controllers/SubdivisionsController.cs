@@ -21,7 +21,8 @@ namespace MapWebApi.Controllers
             if (!_context.Subdivisions.Any())
             {
                 Commander Kuznecov = _context.Commanders.FirstOrDefault(x=>x.LastName == "Кузнецов");
-                TypeOfSubdivision army = new TypeOfSubdivision { Name = "Армия"};
+                TypeOfSubdivision army = _context.TypesOfSubdivision.FirstOrDefault(t => t.Name == "Армия");
+
                 Subdivision armyNumber3 = new Subdivision
                 {
                     Commander = Kuznecov,
@@ -48,7 +49,9 @@ namespace MapWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Subdivision>>> GetSubdivisions()
         {
-            return await _context.Subdivisions.ToListAsync();
+            return await _context.Subdivisions
+                .Include(s=>s.Commander.Rank)
+                .ToListAsync();
 
 
 //            Армия   4А

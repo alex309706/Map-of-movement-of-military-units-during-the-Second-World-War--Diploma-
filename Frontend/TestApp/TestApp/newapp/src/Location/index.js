@@ -7,3 +7,6 @@ export {default as TextField}  from '@material-ui/core/TextField';
 export {default as SaveIcon}  from '@material-ui/icons/Save';
 export {default as AddLocation} from './AddLocation';
 export {default as CloudUploadIcon} from '@material-ui/icons/CloudUpload';
+export {default as axios} from 'axios';
+
+

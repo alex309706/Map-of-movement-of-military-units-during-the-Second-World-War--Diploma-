@@ -9,25 +9,25 @@ const images = [
     url: 'https://mcdn.tvzvezda.ru/storage/default/2020/10/10/e3eafaa5ebf3435d901074ed610cf97c.jpg',
     title: 'Командующие',
     width: '25%',
-    urlTo:'/listOfCommanders'
+    urlTo:'/Commanders'
   },
   {
     url: 'https://narkompoisk.ru/upload/000/u2/b/0/1418-662315413141154131541434542554.jpg',
     title: 'Подразделения',
     width: '25%',
-    urlTo:'/listOfSubdivisions'
+    urlTo:'/Subdivisions'
   },
   {
     url: 'https://skr.su/uploaded/31/b3/3d/46fe7e08acf175cdc9d3e21596.jpeg',
     title: 'Местоположение',
     width: '25%',
-    urlTo:'/listOfLocations'
+    urlTo:'/Locations'
   },
   {
     url: 'https://gdb.rferl.org/AD541CA2-FCF7-451D-812C-52B89B7EB348_cx11_cy10_cw89_w1080_h608.jpg',
     title: 'Актуализированные данные',
     width: '25%',
-    urlTo:'/listOfActualData'
+    urlTo:'/ActualData'
   },
 ];
 

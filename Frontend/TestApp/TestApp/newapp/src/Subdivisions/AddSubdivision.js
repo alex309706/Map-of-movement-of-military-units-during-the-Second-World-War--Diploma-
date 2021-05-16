@@ -1,9 +1,6 @@
 import {SaveIcon,TextField,Button ,useStyles,React,Menu,MenuItem} from './index';
-
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
 import {Link} from 'react-router-dom';
-
-
 
 
 export default function AddSubdivision(props)
