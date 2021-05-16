@@ -1,33 +1,18 @@
-import {SaveIcon,TextField,Button,useStyles,React,Menu,MenuItem,PopupState, axios} from './index';
-import {bindTrigger, bindMenu } from 'material-ui-popup-state';
-import {Link} from 'react-router-dom';
+import {SaveIcon,TextField,Button,useStyles,React,Select,FormControl,MenuItem,FormHelperText, axios} from './index';
 import {useEffect , useState} from 'react'
-
-
-
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
-
-
-
-
-export default function AddCommander(props)
+export default function AddCommander()
 {
+    const classes = useStyles();
+  
     const [CommanderLastName, setCommanderLastName] = useState([])
-    
-
 
     const HandleWriteCommanderLastName = (event)=>
     {
         setCommanderLastName(event.target.value)
     }
-
     const baseUrlForRanks = 'https://localhost:44315/api/Ranks'
 
     const baseUrlForCommanders = 'https://localhost:44315/api/Commanders'
-
 
     const [Ranks, setRanks] = useState([])
     useEffect(() => {
@@ -39,37 +24,31 @@ export default function AddCommander(props)
             }
         )
     }, [])
-   
-    
-const ranksToMenuItems = Ranks.map((rank)=>
+
+    const ranksToMenuItems = Ranks.map((rank)=>
     <MenuItem key={rank.id} value = {rank.name}>{rank.name}</MenuItem>
 )
 const [SelectedRankName, setSelectedRankName] = useState("Генерал-Майор")
+//Костыль , т.к. нам нужен ID Rank
+const [SelectedRankId, setSelectedRankId] = useState(6)
 
 const [SelectedRank, setSelectedRank] = useState({})
 
 const handleChangeRank = (event) => {
+    const rank = Ranks.find(rank=>rank.name == SelectedRankName)
+    setSelectedRank(rank)
+    setSelectedRankId(rank.id)
     setSelectedRankName(event.target.value)
-    setSelectedRank(Ranks.find(rank=>rank.name == SelectedRankName))
 };
-
 const [Commander, setCommander] = useState([])
-
-
 const HandleCreateCommander = () =>{
-
     setCommander(
             {
-                rankid:SelectedRank.id,
-                rank:SelectedRank,
-                lastName:CommanderLastName,
-                firstName:"",
-                patronymic:""
+                rankId:SelectedRankId,
+                lastName:CommanderLastName
             }
         )
-        console.log(Commander)
 }
-
 useEffect(() => {
     axios.post(baseUrlForCommanders,Commander)
     .then(response=>
@@ -77,39 +56,37 @@ useEffect(() => {
             console.log(response)
             console.log(response.data)
         })
-},[] )
+},[Commander])
 
-const classes = useStyles();
+return(
+    <div >
+    <TextField 
+    className={classes.textFieldForAddition}
+    variant="outlined"
+    label ="Введите Фамилию нового командующего"
+    onChange = {HandleWriteCommanderLastName}
+   />
+    <FormControl className={classes.formControl}>
+    <Select
+      value = {SelectedRankName}
+      onChange={handleChangeRank}
+      className={classes.selectEmpty}
+      inputProps={{ 'aria-label': 'Without label' }}
+    >
+      {ranksToMenuItems}
+    </Select>
+    <FormHelperText>Выберите звание</FormHelperText>
+    </FormControl>
 
-    return(
-        <div >
-        <TextField 
-        className={classes.textFieldForAddition}
-        variant="outlined"
-        label ="Введите Фамилию нового командующего"
-        onChange = {HandleWriteCommanderLastName}
-       />
-        <FormControl className={classes.formControl}>
-        <Select
-          value = {SelectedRankName}
-          onChange={handleChangeRank}
-          className={classes.selectEmpty}
-          inputProps={{ 'aria-label': 'Without label' }}
-        >
-          {ranksToMenuItems}
-        </Select>
-        <FormHelperText>Выберите звание</FormHelperText>
-        </FormControl>
-
-        <Button
-        variant="contained"
-        color="secondary"
-        className={classes.saveButton}
-        startIcon={<SaveIcon />}
-        onClick = {HandleCreateCommander}
-      >
-        Сохранить
-      </Button>
-        </div>
-    )
+    <Button
+    variant="contained"
+    color="secondary"
+    className={classes.saveButton}
+    startIcon={<SaveIcon />}
+    onClick = {HandleCreateCommander}
+  >
+    Сохранить
+  </Button>
+    </div>
+)
 }

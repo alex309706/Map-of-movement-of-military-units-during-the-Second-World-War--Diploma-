@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MapWebApi.ViewModels;
+
 
 namespace MapWebApi.Controllers
 {
@@ -40,17 +42,18 @@ namespace MapWebApi.Controllers
             return new ObjectResult(commander);
         }
         [HttpPost]
-        public async Task<ActionResult<Commander>> Post(Commander commander)
+        public async Task<ActionResult<Commander>> Post(CommanderViewModel commander)
         {
             
             if (commander == null)
             {
                 return BadRequest();
             }
+            Commander newCommander = new Commander {LastName = commander.LastName, RankId = commander.RankId };
 
-            db.Commanders.Add(commander);
+            db.Commanders.Add(newCommander);
             await db.SaveChangesAsync();
-            return Ok(commander);
+            return Ok(newCommander);
         }
 
         [HttpPut]
