@@ -18,6 +18,27 @@ namespace MapWebApi.Controllers
         public ActualDataController(SubdivisionsContext context)
         {
             _context = context;
+
+            if (_context.ActualData.Count() < 1)
+            {
+                ActualData firstActualData = new ActualData()
+                {
+                    Date = new DateTime(1941, 6, 22),
+                    SubdivisionId = _context.Subdivisions.FirstOrDefault().Id,
+                    DocumentId = _context.Documents.FirstOrDefault().Id,
+                    LocationId = _context.Locations.FirstOrDefault().Id,
+                };
+                ActualData secondActualData = new ActualData()
+                {
+                    Date = new DateTime(1941, 6, 23),
+                    SubdivisionId = _context.Subdivisions.FirstOrDefault().Id,
+                    DocumentId = _context.Documents.FirstOrDefault().Id,
+                    LocationId = 2
+                };
+                _context.ActualData.AddRange(firstActualData,secondActualData);
+                _context.SaveChanges();
+            }
+
         }
 
         // GET: api/ActualData
@@ -33,23 +54,9 @@ namespace MapWebApi.Controllers
                                     .Include(actualData => actualData.Location)
                                     .Include(actualData => actualData.Document)
                                     .ToListAsync();
-            if (actualData.Count<1)
-            {
-                var initialData = SetInitialActualData();
-                _context.ActualData.AddRange(initialData);
-                await _context.SaveChangesAsync();
-            }
+          
 
             return actualData;
-                //await _context.ActualData
-                //.Include(actualData => actualData.Subdivision)
-                //.ThenInclude(s => s.Commander)
-                //.ThenInclude(c => c.Rank)
-                //.Include(actualData => actualData.Subdivision)
-                //.ThenInclude(s => s.TypeOfSubdivision)
-                //.Include(actualData => actualData.Location)
-                //.Include(actualData => actualData.Document)
-                //.ToListAsync();
         }
         // GET: api/ActualData/date
         [HttpGet("{date}")]
@@ -125,27 +132,32 @@ namespace MapWebApi.Controllers
         {
             return _context.ActualData.Any(e => e.Id == id);
         }
-        private  ActualData[] SetInitialActualData()
-        {
-            ActualData[] result = new ActualData[2];
-            ActualData firstActualData = new ActualData
-            {
-                Date = new DateTime(1941, 6, 22),
-                SubdivisionId = _context.Subdivisions.First().Id,
-                DocumentId = _context.Documents.First().Id,
-                LocationId = _context.Locations.First().Id,
-            };
-            ActualData secondActualData = new ActualData
-            {
-                Date = new DateTime(1941,6,23),
-                SubdivisionId = _context.Subdivisions.First().Id,
-                DocumentId = _context.Documents.First().Id,
-                LocationId = 2
-            };
-            result[0] = firstActualData;
-            result[1] = secondActualData;
+        //РАЗОБРАТЬСЯ С ASYNC AWAIT
+        //private async Task<List<ActualData>> SetInitialActualData()
+        //{
+        //    return await Task.Run(()=> GetListOfInitialData());
+        //}
+        //private List<ActualData> GetListOfInitialData()
+        //{
+        //    List<ActualData> result = new List<ActualData>();
+        //    ActualData firstActualData = new ActualData
+        //    {
+        //        Date = new DateTime(1941, 6, 22),
+        //        SubdivisionId = _context.Subdivisions.First().Id,
+        //        DocumentId = _context.Documents.First().Id,
+        //        LocationId = _context.Locations.First().Id,
+        //    };
+        //    ActualData secondActualData = new ActualData
+        //    {
+        //        Date = new DateTime(1941, 6, 23),
+        //        SubdivisionId = _context.Subdivisions.First().Id,
+        //        DocumentId = _context.Documents.First().Id,
+        //        LocationId = 2
+        //    };
+        //    result.Add(firstActualData);
+        //    result.Add(secondActualData);
+        //    return result;
+        //}
 
-            return result;
-        }
     }
 }
