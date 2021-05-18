@@ -12,3 +12,14 @@ export {default as Box} from '@material-ui/core/Box';
 export {default as Menu} from '@material-ui/core/Menu';
 export {default as MenuItem} from '@material-ui/core/MenuItem';
 export {default as axios} from 'axios';
+export {default as  DeleteActualData} from './DeleteActualData';
+export {default as  EditActualData} from './EditActualData';
+export {default as FormControl} from '@material-ui/core/FormControl';
+export {default as Select} from '@material-ui/core/Select';
+export {default as FormHelperText }from '@material-ui/core/FormHelperText';
+
+
+
+
+
+

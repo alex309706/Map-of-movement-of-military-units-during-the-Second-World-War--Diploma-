@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import {useStyles ,ProfileButton,TextField,DeleteIcon,Button,AddActualData,axios,Box} from './index';
+import {useStyles ,ProfileButton,TextField,Button,AddActualData,axios,Box,DeleteActualData,EditActualData} from './index';
 
 const defaultProps = {
     bgcolor: 'background.paper',
@@ -7,13 +7,19 @@ const defaultProps = {
     border: 1,
     borderRadius:16
   };
-function GetActualDataAsComponent(props)
+function GetActualDataAsComponent({date,subdivision,location,document,id,RerenderActualData})
 {
+    const CustomDate = new Date(date)
+
+    // +1 к месяцу костыль
+
+    const stringDate = `${CustomDate.getDate()}.${CustomDate.getMonth()+1}.${CustomDate.getFullYear()}`
+
     const classes = useStyles();
     return(
         <Box {...defaultProps}> 
             <div >
-            <TextField defaultValue={props.date}
+            <TextField defaultValue={stringDate}
              className={classes.textField}
              variant="outlined"
              label ="Дата"
@@ -21,7 +27,8 @@ function GetActualDataAsComponent(props)
                 readOnly: true,
               }}
              />
-            <TextField defaultValue={props.subdivision.name}
+             
+            <TextField defaultValue={subdivision.name}
              className={classes.textField}
              variant="outlined"
              label ="Название подразделения"
@@ -30,7 +37,7 @@ function GetActualDataAsComponent(props)
               }}
              />
             <TextField 
-            defaultValue={`${props.subdivision.commander.rank.name}${props.subdivision.commander.firstName? props.subdivision.commander.firstName : ''} ${props.subdivision.commander.lastName? props.subdivision.commander.lastName : ''} ${props.subdivision.commander.patronymic? props.subdivision.commander.patronymic : ''}`} 
+            defaultValue={`${subdivision.commander.rank.name}${subdivision.commander.firstName? subdivision.commander.firstName : ''} ${subdivision.commander.lastName? subdivision.commander.lastName : ''} ${subdivision.commander.patronymic? subdivision.commander.patronymic : ''}`} 
              className={classes.textField}
              variant="outlined"
              label ="Командир"
@@ -38,7 +45,7 @@ function GetActualDataAsComponent(props)
                 readOnly: true,
               }}
              />
-             <TextField defaultValue={props.subdivision.strength}
+             <TextField defaultValue={subdivision.strength}
              className={classes.textField}
              variant="outlined"
              label ="Численность"
@@ -46,7 +53,7 @@ function GetActualDataAsComponent(props)
                 readOnly: true,
               }}
              />
-             <TextField defaultValue={props.location.name}
+             <TextField defaultValue={location.name}
              className={classes.textField}
              variant="outlined"
              label ="Местоположение"
@@ -54,7 +61,7 @@ function GetActualDataAsComponent(props)
                 readOnly: true,
               }}
              />
-              <TextField defaultValue={props.document.name}
+              <TextField defaultValue={document.name}
              className={classes.textField}
              variant="outlined"
              label ="Документ"
@@ -63,49 +70,26 @@ function GetActualDataAsComponent(props)
               }}
              />
              <div className={classes.ButtonsToOneLine}>
-             <Button 
-            className={classes.button}
-            variant="contained"
-            color="primary"
-            >
-            Изменить
-            </Button>
-                <Button
-                variant="contained"
-                color="secondary"
-                className={classes.button}
-                startIcon={<DeleteIcon />}
-            >
-                Удалить
-            </Button>
+                <EditActualData/>
+                <DeleteActualData id = {id}  RerenderActualData={RerenderActualData} />
              </div>
             </div>
         </Box>
     )
 }
 
-function ActualDataToComponents({ActualData:actualData})
+function ActualDataToComponents({ActualData:actualData,RerenderActualData})
 {
     const mapToComponents = actualData.map((aD)=>
     <li key={aD.id} style={{ listStyleType: "none" }}>
-        <GetActualDataAsComponent {...aD}/>
+        <GetActualDataAsComponent RerenderActualData={RerenderActualData} {...aD}/>
     </li>
     );
     return(
         <ul>{mapToComponents}</ul>
     );
 }
-function Header(props)
-{
-    const classes = useStyles();
-    return(
-        <div className={classes.header}>
-            <h2 >Актуализированные данные</h2>
-            <AddButton/>
-            <AddActualData/>
-        </div>
-    )
-}
+
 function AddButton()
 {
     const classes = useStyles();
@@ -120,21 +104,32 @@ function AddButton()
 }
 export default function ListOfActualData()
 {
-    const Url = 'https://localhost:44315/api/ActualData';
+    const baseUrlForActualData = 'https://localhost:44315/api/ActualData';
+   
+    const classes = useStyles()
     const [ActualData, setActualData] = useState([])
+  
+    const FetchActualData = ()=>
+    {
+        axios.get(baseUrlForActualData)
+        .then(response=>
+         {
+            setActualData(response.data)
+         })
+    }
     useEffect(() => {
-       axios.get(Url)
-       .then(response=>
-        {
-        console.log(response.data)
-        setActualData(response.data)
-        })
+        FetchActualData()
     },[])
-    return(
+
+        return(
         <div >
             <ProfileButton/>
-            <Header/>
-            <ActualDataToComponents ActualData={ActualData}/>
+            <div className={classes.header}>
+            <h2 >Актуализированные данные</h2>
+            <AddButton/>
+            <AddActualData RerenderActualData = {FetchActualData}/>
+        </div>
+            <ActualDataToComponents ActualData={ActualData} RerenderActualData={FetchActualData}/>
         </div>
     )
 }

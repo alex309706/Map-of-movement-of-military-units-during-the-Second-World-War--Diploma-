@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MapWebApi.Models;
+using MapWebApi.ViewModels;
 
 namespace MapWebApi.Controllers
 {
@@ -104,12 +105,20 @@ namespace MapWebApi.Controllers
         // POST: api/ActualData
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ActualData>> PostActualData(ActualData actualData)
+        public async Task<ActionResult<ActualData>> PostActualData(ActualDataViewModel inputActualData)
         {
-            _context.ActualData.Add(actualData);
+            ActualData newActualData = new ActualData
+            {
+                Date = inputActualData.Date,
+                SubdivisionId = inputActualData.SubdivisionId,
+                LocationId = inputActualData.LocationId,
+                DocumentId = inputActualData.DocumentId,
+            };
+
+            _context.ActualData.Add(newActualData);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetActualData", new { id = actualData.Id }, actualData);
+            return CreatedAtAction("GetActualData", new { id = newActualData.Id }, newActualData);
         }
 
         // DELETE: api/ActualData/5
