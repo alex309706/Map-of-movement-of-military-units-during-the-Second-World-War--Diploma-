@@ -1,13 +1,10 @@
 import React from 'react'
-import { YMaps, Map, Placemark,ObjectManager } from 'react-yandex-maps';
-// import tankIcon from './tank.jpg';
+import { YMaps, Map,ObjectManager } from 'react-yandex-maps';
 import Calendar from 'react-calendar';
 import {useState, useEffect} from 'react';
 import axios from 'axios'; 
 
-
-function CustomCalendar({date,onClick}) {
-        
+function CustomCalendar({date,onClick}) {      
     return (
         <div className="calendar">
           <Calendar
@@ -15,7 +12,8 @@ function CustomCalendar({date,onClick}) {
              onClickDay={onClick}
           />
           <label htmlFor="selectedDate">Выбранная дата</label>
-            <input id="selectedDate" onChange={()=>console.log("Заглушка из MapOfSubdivisions.CustomCalendar. ID=selectedDate")} type="text" value ={date.toDateString()}/>
+            <input id="selectedDate" onChange={()=>console.log("Заглушка из MapOfSubdivisions.CustomCalendar. ID=selectedDate")} 
+            type="text" value ={date.toDateString()}/>
         </div>
       );
 }
@@ -23,7 +21,6 @@ export default function MapOfSubdivisions() {
 
     const [Datetime, setDatetime] = useState('1941-06-22')
     const [ActualData, setActualData] = useState([])
-
     const UrlToApi = 'https://localhost:44315/api/ActualData/';
     const [Url, setUrl] = useState(UrlToApi+Datetime)
 
@@ -32,9 +29,6 @@ export default function MapOfSubdivisions() {
         axios.get(Url)
         .then(response => 
             {
-                // console.log(Url)
-                // console.log(response.data)
-                // console.log(response.data)
                 setActualData(response.data)
             })
          
@@ -42,9 +36,6 @@ export default function MapOfSubdivisions() {
     useEffect(() => {
         FetchActualData()
     },[Url])
-    useEffect(() => {
-        FetchActualData()
-    },[])
  
     const onDateClick = e =>
     {
@@ -57,7 +48,6 @@ export default function MapOfSubdivisions() {
     }
     const mapState = { center: [53.88,28.05], zoom: 7 };
 
-    console.log(ActualData)
     if(ActualData.length>0)
     return(
         <div>
@@ -94,7 +84,10 @@ export default function MapOfSubdivisions() {
                                 </p>
                                 <p>Численность: ${oneActualData.subdivision.strength? oneActualData.subdivision.strength+ " человек": "Отсутствует поле" }.</p>
                                 <p>Состав: ${oneActualData.subdivision.composition? oneActualData.subdivision.composition: "Отсутствует поле" }.</p>
-                                <p>Удостоверяющий документ: ${oneActualData.document.name? oneActualData.document.name: "Отсутствует поле" }.</p>` ,
+                                <p>Удостоверяющий документ: ${oneActualData.document.name? oneActualData.document.name: "Отсутствует поле" }.</p> 
+                                <p>Страница документа: ${oneActualData.documentPage? oneActualData.documentPage: "Отсутствует поле" }.</p>` 
+                                ,
+                                
                              }
                         }
                     })
@@ -115,7 +108,5 @@ export default function MapOfSubdivisions() {
             <h1>No data for this period</h1>
              <CustomCalendar date = {new Date(Datetime)} onClick = {onDateClick}/>
         </div>
-        
-
     )
 }

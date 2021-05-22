@@ -7,12 +7,12 @@ function Header(props)
     return(
         <div className={classes.header}>
             <h2 >Список подразделений</h2>
-            <Button variant="contained"
+            {/* <Button variant="contained"
             color="primary"
             className={classes.buttonAdd}
             >
                 Добавить
-            </Button>
+            </Button> */}
             <AddSubdivision/>
         </div>
     )

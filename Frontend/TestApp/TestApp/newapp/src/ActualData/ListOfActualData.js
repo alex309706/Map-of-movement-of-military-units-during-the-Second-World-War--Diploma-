@@ -7,7 +7,7 @@ const defaultProps = {
     border: 1,
     borderRadius:16
   };
-function GetActualDataAsComponent({date,subdivision,location,document,id,RerenderActualData})
+function GetActualDataAsComponent({date,subdivision,location,document,id,RerenderActualData,documentPage})
 {
     const CustomDate = new Date(date)
 
@@ -69,6 +69,14 @@ function GetActualDataAsComponent({date,subdivision,location,document,id,Rerende
                 readOnly: true,
               }}
              />
+               <TextField defaultValue={documentPage}
+             className={classes.textField}
+             variant="outlined"
+             label ="Страница документа"
+             InputProps={{
+                readOnly: true,
+              }}
+             />
              <div className={classes.ButtonsToOneLine}>
                 <EditActualData/>
                 <DeleteActualData id = {id}  RerenderActualData={RerenderActualData} />
@@ -114,6 +122,7 @@ export default function ListOfActualData()
         axios.get(baseUrlForActualData)
         .then(response=>
          {
+             console.log(response.data)
             setActualData(response.data)
          })
     }
@@ -123,7 +132,7 @@ export default function ListOfActualData()
 
         return(
         <div >
-            <ProfileButton/>
+            {/* <ProfileButton/> */}
             <div className={classes.header}>
             <h2 >Актуализированные данные</h2>
             <AddButton/>

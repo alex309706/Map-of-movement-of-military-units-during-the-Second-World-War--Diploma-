@@ -42,7 +42,7 @@ namespace MapWebApi.Controllers
 
         }
 
-        // GET: api/ActualData
+        // получение коллекции данных за всю историю: api/ActualData
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ActualData>>> GetActualData()
         {
@@ -55,11 +55,9 @@ namespace MapWebApi.Controllers
                                     .Include(actualData => actualData.Location)
                                     .Include(actualData => actualData.Document)
                                     .ToListAsync();
-          
-
             return actualData;
         }
-        // GET: api/ActualData/date
+        // получение коллекции элементов на определенную дату: api/ActualData/date
         [HttpGet("{date}")]
         public async Task<ActionResult<IEnumerable<ActualData>>> GetActualData(DateTime date)
         {
@@ -73,6 +71,7 @@ namespace MapWebApi.Controllers
                 .Include(actualData => actualData.Document)
                 .ToListAsync();
         }
+        //Изменение элемента
         [HttpPut("{id}")]
         public async Task<IActionResult> PutActualData(int id, ActualData actualData)
         {
@@ -101,9 +100,7 @@ namespace MapWebApi.Controllers
 
             return NoContent();
         }
-
-        // POST: api/ActualData
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // создание элемента: api/ActualData
         [HttpPost]
         public async Task<ActionResult<ActualData>> PostActualData(ActualDataViewModel inputActualData)
         {
@@ -113,6 +110,7 @@ namespace MapWebApi.Controllers
                 SubdivisionId = inputActualData.SubdivisionId,
                 LocationId = inputActualData.LocationId,
                 DocumentId = inputActualData.DocumentId,
+                DocumentPage = inputActualData.DocumentPage
             };
 
             _context.ActualData.Add(newActualData);
@@ -120,8 +118,7 @@ namespace MapWebApi.Controllers
 
             return CreatedAtAction("GetActualData", new { id = newActualData.Id }, newActualData);
         }
-
-        // DELETE: api/ActualData/5
+        // удаление элемента: api/ActualData/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteActualData(int id)
         {
@@ -141,6 +138,9 @@ namespace MapWebApi.Controllers
         {
             return _context.ActualData.Any(e => e.Id == id);
         }
+
+
+
         //РАЗОБРАТЬСЯ С ASYNC AWAIT
         //private async Task<List<ActualData>> SetInitialActualData()
         //{

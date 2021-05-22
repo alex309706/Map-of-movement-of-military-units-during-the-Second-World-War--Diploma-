@@ -25,18 +25,23 @@ const useStyles = makeStyles((theme) => ({
         marginBottom:'20px'
     },
     textField:{
-        height:'10ch',
+        height:'8ch',
         width:'40ch',
         marginLeft:'20px',
         marginTop:'20px'
     },
     textFieldForAddition:{
-        height:'10ch',
+        height:'5ch',
         width:'40ch',
         marginRight:'20px'
     },
     saveButton:{
         margin:'10px 0px 20px 10px', 
+        width:'130px',
+        height:'40px',
+    },
+    saveButtonForActualData:{
+        margin:'30px 0px 20px 10px', 
         width:'130px',
         height:'40px',
     },

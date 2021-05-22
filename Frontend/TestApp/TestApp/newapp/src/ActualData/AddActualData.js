@@ -207,14 +207,14 @@ export default function AddActualData({RerenderActualData})
          value={SelectedDate}
          />
 
-        <TextField className={classes.textField}
+        {/* <TextField className={classes.textField}
          variant="outlined"
          label ="Введите численность"
-         />
+         /> */}
        <Button
         variant="contained"
         color="primary"
-        className={classes.saveButton}
+        className={classes.saveButtonForActualData}
         startIcon={<SaveIcon />}
         onClick = {HandleSaveActualData}
       >

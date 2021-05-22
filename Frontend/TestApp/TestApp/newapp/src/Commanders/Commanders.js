@@ -49,12 +49,12 @@ function Header()
         <div className={classes.header}>
         <h2 >Список командующих</h2>
         <div>
-        <Button variant="contained"
+        {/* <Button variant="contained"
         color="primary"
         className={classes.buttonAdd}
         >
             Добавить
-        </Button>
+        </Button> */}
       { <AddCommander  />}
         </div>
     </div>

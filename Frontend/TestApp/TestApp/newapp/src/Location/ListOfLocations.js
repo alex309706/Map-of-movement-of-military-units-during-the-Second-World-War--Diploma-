@@ -68,13 +68,13 @@ function AddLocationButton(props)
     const classes = useStyles();
     return(
         <div >
-            <Button 
+            {/* <Button 
             variant="contained"
             color="primary"
             className={classes.buttonAdd}
             >
             Добавить
-            </Button>
+            </Button> */}
         </div>
     )
 }

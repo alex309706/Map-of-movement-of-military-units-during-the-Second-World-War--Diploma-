@@ -10,6 +10,7 @@ namespace MapWebApi.Models
         public Subdivision Subdivision { get; set; }
         public int DocumentId { get; set; }
         public Document Document { get; set; }
+        public int DocumentPage { get; set; }
         public int LocationId { get; set; }
         public Location Location { get; set; }
     }

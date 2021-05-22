@@ -19,42 +19,39 @@ namespace MapWebApi
 {
     public class Startup
     {
-
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
+        //Конфигурация приложения
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // Конфигурация сервисов
         public void ConfigureServices(IServiceCollection services)
         {
-            
             string connectionString = GetConnectionString("DefaultConnection");
-
             // устанавливаем контекст данных
             services.AddDbContext<SubdivisionsContext>(options => options.UseSqlServer(connectionString));
-
-
+            //добавление контроллеров
             services.AddControllers();
+            //добавление политики CORS
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
                                       builder.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
-                                      builder.WithOrigins("http://localhost:3001");
                                   });
             });
+            //добавление Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MapWebApi", Version = "v1" });
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // Конфигурация pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -77,6 +74,7 @@ namespace MapWebApi
                 endpoints.MapControllers();
             });
         }
+        //Получение строки подключение к БД
         public string GetConnectionString(string connection)
         {
             string ConnectionString = string.Empty;

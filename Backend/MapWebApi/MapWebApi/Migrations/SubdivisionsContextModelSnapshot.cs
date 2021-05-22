@@ -32,6 +32,9 @@ namespace MapWebApi.Migrations
                     b.Property<int>("DocumentId")
                         .HasColumnType("int");
 
+                    b.Property<int>("DocumentPage")
+                        .HasColumnType("int");
+
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
 
