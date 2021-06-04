@@ -34,7 +34,7 @@ namespace MapWebApi.Controllers
                 Commander Korobkov = _context.Commanders.FirstOrDefault(x => x.LastName == "Коробков");
                 Subdivision armyNumber4 = new Subdivision
                 {
-                    Commander = Kuznecov,
+                    Commander = Korobkov,
                     Strength = 212625,
                     Composition = "28ск    14мк    6сд 42сд    49сд    75сд    205мсд  22тд    30тд    10сад",
                     Name = "4 Армия",

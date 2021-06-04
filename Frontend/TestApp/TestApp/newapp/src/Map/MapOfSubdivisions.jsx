@@ -3,6 +3,7 @@ import { YMaps, Map,ObjectManager } from 'react-yandex-maps';
 import Calendar from 'react-calendar';
 import {useState, useEffect} from 'react';
 import axios from 'axios'; 
+import { ProfileButton } from '../ActualData';
 
 function CustomCalendar({date,onClick}) {      
     return (
@@ -51,6 +52,7 @@ export default function MapOfSubdivisions() {
     if(ActualData.length>0)
     return(
         <div>
+            <ProfileButton/>
             <CustomCalendar date = {new Date(Datetime)} onClick = {onDateClick}/>
             <YMaps>
              <Map defaultState={mapState} className="map">

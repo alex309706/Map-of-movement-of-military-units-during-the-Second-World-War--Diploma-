@@ -135,7 +135,7 @@ export default function ListOfActualData()
             {/* <ProfileButton/> */}
             <div className={classes.header}>
             <h2 >Актуализированные данные</h2>
-            <AddButton/>
+            {/* <AddButton/> */}
             <AddActualData RerenderActualData = {FetchActualData}/>
         </div>
             <ActualDataToComponents ActualData={ActualData} RerenderActualData={FetchActualData}/>

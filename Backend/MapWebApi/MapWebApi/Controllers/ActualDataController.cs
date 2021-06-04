@@ -27,6 +27,7 @@ namespace MapWebApi.Controllers
                     Date = new DateTime(1941, 6, 22),
                     SubdivisionId = _context.Subdivisions.FirstOrDefault().Id,
                     DocumentId = _context.Documents.FirstOrDefault().Id,
+                    DocumentPage = 10,
                     LocationId = _context.Locations.FirstOrDefault().Id,
                 };
                 ActualData secondActualData = new ActualData()
@@ -34,7 +35,8 @@ namespace MapWebApi.Controllers
                     Date = new DateTime(1941, 6, 23),
                     SubdivisionId = _context.Subdivisions.FirstOrDefault().Id,
                     DocumentId = _context.Documents.FirstOrDefault().Id,
-                    LocationId = 2
+                    DocumentPage = 18,
+                    LocationId = _context.Locations.OrderBy(ad=>ad.Id).LastOrDefault().Id
                 };
                 _context.ActualData.AddRange(firstActualData,secondActualData);
                 _context.SaveChanges();
