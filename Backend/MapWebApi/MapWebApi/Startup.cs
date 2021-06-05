@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,9 +34,9 @@ namespace MapWebApi
         {
             string connectionString = GetConnectionString("DefaultConnection");
             // устанавливаем контекст данных
-           // services.AddDbContext<SubdivisionsContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<SubdivisionsContext>(options => options.UseSqlServer(connectionString));
 
-            services.AddDbContext<SubdivisionsContext>(opt => opt.UseInMemoryDatabase("Alex"));
+           // services.AddDbContext<SubdivisionsContext>(opt => opt.UseInMemoryDatabase("Alex"));
             //добавление контроллеров
             services.AddControllers();
             //добавление политики CORS
@@ -53,22 +54,29 @@ namespace MapWebApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MapWebApi", Version = "v1" });
             });
         }
-        private Task NotifyRequestFirst(HttpContext context, Func<Task> nextMiddleware)
-        {
-            Console.WriteLine($"Middleware 1 {context.Request.Path}");
-            return nextMiddleware();
-        }
-        private Task NotifyRequestSecond(HttpContext context, Func<Task> nextMiddleware)
-        {
-            Console.WriteLine($"Middleware 2 {context.Request.Path}");
-            return nextMiddleware();
-        }
+        //private Task NotifyRequestFirst(HttpContext context, Func<Task> nextMiddleware)
+        //{
+        //    Console.WriteLine($"Middleware 1 {context.Request.Path}");
+        //    return nextMiddleware();
+        //}
+        //private Task NotifyRequestSecond(HttpContext context, Func<Task> nextMiddleware)
+        //{
+        //    Console.WriteLine($"Middleware 2 {context.Request.Path}");
+        //    return nextMiddleware();
+        //}
         // Конфигурация pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,ILogger<Startup> logger)
         {
-            app.Use(NotifyRequestFirst);
 
-            app.Use(NotifyRequestSecond);
+            //app.Use(NotifyRequestFirst);
+
+            //app.Use(NotifyRequestSecond);
+
+            app.Use(async (context, next) =>
+            {
+                logger.LogInformation($"Processing request {context.Request.Path.Value}");
+                await next();
+            });
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MapWebApi v1"));
@@ -79,11 +87,13 @@ namespace MapWebApi
             app.UseRouting();
 
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+           
         }
         //Получение строки подключение к БД
         public string GetConnectionString(string connection)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,11 @@ namespace MapWebApi.Models
         public SubdivisionsContext(DbContextOptions<SubdivisionsContext> options)
             :base(options)
         {
+
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo(message=>Debug.WriteLine(message));
         }
     }
 }
