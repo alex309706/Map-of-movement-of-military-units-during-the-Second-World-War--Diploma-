@@ -20,7 +20,7 @@ namespace MapWebApi.Controllers
         {
             _context = context;
 
-            if (_context.ActualData.Count() < 1)
+            if (_context.ActualData.Count() >= 1)
             {
                 ActualData firstActualData = new ActualData()
                 {

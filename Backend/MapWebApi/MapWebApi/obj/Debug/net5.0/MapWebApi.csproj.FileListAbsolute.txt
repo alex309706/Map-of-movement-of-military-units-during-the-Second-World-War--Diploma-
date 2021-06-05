@@ -267,3 +267,4 @@ E:\Учеба\4 course 2 term\Диплом\Backend\MapWebApi\MapWebApi\obj\Debug
 E:\Учеба\4 course 2 term\Диплом\Backend\MapWebApi\MapWebApi\obj\Debug\net5.0\ref\MapWebApi.dll
 E:\Учеба\4 course 2 term\Диплом\Backend\MapWebApi\MapWebApi\obj\Debug\net5.0\MapWebApi.pdb
 E:\Учеба\4 course 2 term\Диплом\Backend\MapWebApi\MapWebApi\obj\Debug\net5.0\MapWebApi.genruntimeconfig.cache
+E:\Учеба\4 course 2 term\Диплом\Backend\MapWebApi\MapWebApi\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.InMemory.dll
