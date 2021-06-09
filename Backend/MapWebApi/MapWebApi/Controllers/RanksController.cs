@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MapWebApi.Models;
+using MapWebApi.ViewModels;
 
 namespace MapWebApi.Controllers
 {
@@ -82,12 +81,12 @@ namespace MapWebApi.Controllers
         // POST: api/Ranks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Rank>> PostRank(Rank rank)
+        public async Task<ActionResult<string>> PostRank(RankViewModel rank)
         {
-            _context.Ranks.Add(rank);
+            Rank newRank = new Rank() { Name = rank.Name};
+            _context.Ranks.Add(newRank);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetRank", new { id = rank.Id }, rank);
+            return $"Rank {newRank.Name} has been created!";
         }
 
         // DELETE: api/Ranks/5
