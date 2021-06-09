@@ -1,0 +1,30 @@
+version: "3.7"
+
+volumes:
+  mssql-data:
+
+services:
+    
+        mapofsubdivisions-api:
+            build:
+                context: ..
+                dockerfile: MapWebApi/Dockerfile
+            ports: 
+                - 25000:80
+            depends_on: 
+                - database
+            restart: always
+
+
+        database:
+            container_name: sql-server-db
+            image: mcr.microsoft.com/mssql/server:2019-latest
+            restart: always
+            volumes:
+                - mssql-data:/mssql/data
+            environment:
+                SA_PASSWORD: "Thesecretpassword_1"
+                ACCEPT_EULA: "Y"
+
+            ports:
+                - "1433:1433"

@@ -32,6 +32,8 @@ namespace MapWebApi
         // Конфигурация сервисов
         public void ConfigureServices(IServiceCollection services)
         {
+            //"DefaultConnection": "Server=database,1433;Database=MapDB;User ID=sa;Password=Thesecretpassword_1;Trusted_Connection=False"
+            //Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
             string connectionString = GetConnectionString("DefaultConnection");
             // устанавливаем контекст данных
             services.AddDbContext<SubdivisionsContext>(options => options.UseSqlServer(connectionString));
